@@ -198,10 +198,28 @@ def read_notes():
 
 # ───────────────────────── Запуск программ ─────────────────────────
 
-def _spawn(args):
-    """Запускает программу отдельно от ассистента (не блокирует и не закрывается вместе с ним)."""
-    subprocess.Popen(args, cwd=HOME, start_new_session=True,
-                     stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+def _spawn(args, wait=1.5):
+    """
+    Запускает программу отдельно от ассистента (не блокирует и не закрывается вместе с ним).
+    Ждёт `wait` секунд: если процесс за это время упал, выбрасывает ошибку с его сообщением.
+    Иначе ассистент сказал бы «открыла», хотя окно так и не появилось.
+    """
+    if not (os.environ.get("DISPLAY") or os.environ.get("WAYLAND_DISPLAY")):
+        raise RuntimeError("нет графической сессии: не заданы DISPLAY и WAYLAND_DISPLAY "
+                           "(ассистент запущен не из рабочего стола или сервис без окружения)")
+    logger.info(f"Запуск: {args}")
+    with tempfile.TemporaryFile() as err:  # не PIPE: закрытый канал убил бы программу по SIGPIPE
+        proc = subprocess.Popen(args, cwd=HOME, start_new_session=True,
+                                stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=err)
+        try:
+            code = proc.wait(timeout=wait)
+        except subprocess.TimeoutExpired:
+            return  # продолжает работать, значит запустилась
+        if code != 0:
+            err.seek(0)
+            text = err.read().decode("utf-8", errors="replace").strip()[-300:]
+            logger.error(f"{args[0]} завершилась с кодом {code}: {text}")
+            raise RuntimeError(f"{args[0]} завершилась с кодом {code}: {text or 'без сообщения'}")
 
 
 def _spawn_terminal(cmd=None):
