@@ -3,7 +3,6 @@
 # Зависимость: pip install "python-telegram-bot>=21"
 import asyncio
 import logging
-import os
 import uuid
 
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
@@ -17,7 +16,6 @@ logger = setup_logger()
 
 from data.config import TG_BOT_TOKEN, TG_ALLOWED_IDS, TG_PROXY, AI_NAME
 from handlers.llm_handler import get_ai_response
-from handlers.stt_handler import transcribe_audio  # Whisper читает .ogg сам (нужен ffmpeg)
 
 histories = {}  # chat_id -> история диалога
 pending = {}    # key -> Future с ответом на подтверждение
@@ -32,7 +30,7 @@ async def cmd_start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not is_allowed(update):
         await update.message.reply_text(f"Твой id: {update.effective_user.id}")  # чтобы вписать в TG_ALLOWED_IDS
         return
-    await update.message.reply_text(f"{AI_NAME} на связи. Пиши или отправляй голосовые. /reset — очистить диалог.")
+    await update.message.reply_text(f"{AI_NAME} на связи. Пиши что угодно. /reset — очистить диалог.")
 
 
 async def cmd_reset(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -98,22 +96,8 @@ async def on_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def on_voice(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if not is_allowed(update):
-        return
-    os.makedirs("data", exist_ok=True)
-    path = f"data/tg_{uuid.uuid4().hex}.ogg"
-    tg_file = await update.message.voice.get_file()
-    await tg_file.download_to_drive(path)
-    try:
-        text = await asyncio.to_thread(transcribe_audio, path)
-    finally:
-        os.remove(path)
-
-    if not text or not text.strip():
-        await update.message.reply_text("Не расслышала, повтори, пожалуйста.")
-        return
-    await update.message.reply_text(f"🎤 {text.strip()}")
-    await process(update, context, text.strip())
+    if is_allowed(update):
+        await update.message.reply_text("Голосовые не принимаю, напиши текстом.")
 
 
 def main():
@@ -130,7 +114,7 @@ def main():
     app.add_handler(CommandHandler("start", cmd_start))
     app.add_handler(CommandHandler("reset", cmd_reset))
     app.add_handler(CallbackQueryHandler(on_button))
-    app.add_handler(MessageHandler(filters.VOICE, on_voice))
+    app.add_handler(MessageHandler(filters.VOICE | filters.AUDIO, on_voice))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, on_text))
 
     logger.info(f"{AI_NAME}: Telegram-бот запущен")

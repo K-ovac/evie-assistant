@@ -95,4 +95,6 @@ def main():
 
 
 if __name__ == "__main__":
+    import signal, sys
+    signal.signal(signal.SIGTERM, lambda *_: sys.exit(0))
     main()
