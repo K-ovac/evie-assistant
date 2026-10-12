@@ -1,0 +1,24 @@
+# Распознавание речи и синтез
+openai-whisper          # STT (нужен системный ffmpeg)
+torch                   # Whisper, Silero TTS, Silero VAD
+torchaudio              # нужен Silero VAD и ресемплинг (версия должна совпадать с torch)
+omegaconf               # нужен torch.hub для Silero TTS
+numpy
+
+# Аудио (микрофон и воспроизведение)
+sounddevice             # нужен системный libportaudio2
+soundfile               # нужен системный libsndfile1
+
+# Связь с LM Studio и интернетом
+requests
+
+# Инструменты ассистента (agent_tools.py)
+psutil                  # нагрузка системы
+num2words               # цифры -> слова для озвучки
+ddgs                    # веб-поиск
+trafilatura             # чтение текста страниц
+
+# Telegram-бот
+python-telegram-bot[socks]>=21   # [socks] нужен, если TG_PROXY вида socks5://...
+
+python-dotenv

@@ -1,0 +1,32 @@
+# Secrets and environment variables
+.env
+.env.*
+!.env.example
+
+data/input.wav
+data/output.wav
+data/system_prompt.txt
+myenv/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+env/
+myenv/
+
+# IDE and editor settings
+.vscode/
+.idea/
+
+# Logs
+*.log
+logs/assistant.log
+
+# OS files
+.DS_Store
+Thumbs.db
