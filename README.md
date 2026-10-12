@@ -54,6 +54,7 @@
 
    ```bash
    sudo apt install ffmpeg libportaudio2 libsndfile1 xdg-utils btop
+   sudo apt install python3-pystray python3-pil python3-gi gir1.2-ayatanaappindicator3-0.1
    ```
 
 2. Виртуальное окружение и зависимости:
