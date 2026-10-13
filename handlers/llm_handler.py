@@ -66,6 +66,9 @@ def get_ai_response(prompt, history=None, confirm=None):
             "messages": [system] + history,
             "tools": tools.get_schemas(),
             "temperature": 0.7,
+            # "chat_template_kwargs": {
+            #     "enable_thinking": False,  # включаем <think>...</think> для моделей, которые поддерживают
+            # }
         }
         try:
             response = requests.post(LM_STUDIO_URL, json=payload, timeout=180)

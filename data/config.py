@@ -9,6 +9,7 @@ load_dotenv(BASE_DIR / ".env")
 MAX_TOOL_STEPS = 5              # максимальное количество шагов, которые агент может сделать при использовании инструментов
 LM_MODEL = os.getenv("LM_MODEL", "local_model")        # или точное имя модели из LM Studio
 LM_STUDIO_URL = os.getenv("LM_STUDIO_URL", "http://127.0.0.1:1234/v1/chat/completions") # URL LM Studio Server, если используется локальная модель.
+
 PIPER_PATH = "myenv/bin/piper"                              # путь к исполняемому файлу PIPER
 MODEL_PATH = "data/ru_RU-irina-medium.onnx"                 # путь к модели PIPER
 AUDIO_FILE = "data/input.wav"                               # файл для входного аудио
@@ -18,8 +19,13 @@ SYSTEM_PROMPT_FILE = "data/system_prompt.txt"               # файл с сис
 # Assistant Config
 AI_NAME = os.getenv("AI_NAME", "Аннигиляторная пушка")             # имя ассистента
 USE_WAKE_WORD = True         # True = ассистент реагирует только на фразу-активацию, False = ассистент реагирует на любую речь
-WAKE_WORDS = ["иви", "эви", "иди", "иве", "ивек", "ивы", "ивик", "ивис", "эвил", "ивей", "ивя", "эвей", "эйвей", "иби", "эби", "эйби"]   # варианты, как Whisper может расслышать имя
-CONVERSATION_TIMEOUT = 30    # сколько секунд ждать следующую фразу после окончания предыдущей, прежде чем закончить разговор
+WAKE_WORDS = [
+    "иви", "эви", "иди", "иве", "ивек", 
+    "ивы", "ивик", "ивис", "эвил", "ивей", 
+    "ивя", "эвей", "эйвей", "иби", "эби", 
+    "эйби", "ивих"
+    ]   # варианты, как Whisper может расслышать имя
+CONVERSATION_TIMEOUT = 90    # сколько секунд ждать следующую фразу после окончания предыдущей, прежде чем закончить разговор
 
 # Telegram Bot Config
 TG_BOT_TOKEN = os.getenv("TG_BOT_TOKEN", "")  #TG Bot Token
@@ -28,11 +34,11 @@ TG_PROXY = os.getenv("TG_PROXY", "")   # например "socks5://127.0.0.1:10
 
 # Whisper Studio Config
 WHISPER_LANGUAGE = "ru"      # язык распознавания речи в Whisper. "auto" = автоопределение, "ru" = русский, "en" = английский и т.д.
-WHISPER_MODEL = "small"      # модель Whisper для распознавания речи. Доступные: tiny, base, small, medium, large
+WHISPER_MODEL = "base"      # модель Whisper для распознавания речи. Доступные: tiny, base, small, medium, large
 
 # Silero TTS Config
 SILERO_LANGUAGE = 'ru'      # язык синтеза речи в Silero
-SILERO_MODEL_ID = 'v4_ru'   # Актуальная стабильная версия v4
+SILERO_MODEL_ID = 'v5_ru'   # Актуальная стабильная версия v4
 SILERO_SPEAKER = 'baya'     # Доступные голоса: kseniya, baya, xenia, aidar, eugene
 SILERO_SAMPLE_RATE = 48000  # частота дискретизации для Silero TTS
 

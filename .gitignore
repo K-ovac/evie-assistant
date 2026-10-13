@@ -8,6 +8,7 @@ data/input.wav
 data/output.wav
 data/system_prompt.txt
 myenv/
+tbot.py
 
 # Python cache
 __pycache__/
