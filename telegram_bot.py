@@ -85,7 +85,7 @@ async def process(update: Update, context: ContextTypes.DEFAULT_TYPE, text: str)
             return False
 
     await context.bot.send_chat_action(chat_id, "typing")
-    answer = await asyncio.to_thread(get_ai_response, text, history, confirm)
+    answer = await asyncio.to_thread(get_ai_response, text, history, confirm, "owner", "telegram")
     await update.message.reply_text(answer[:4096])  # лимит Telegram на сообщение
 
 

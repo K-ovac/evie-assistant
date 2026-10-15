@@ -10,6 +10,23 @@ MAX_TOOL_STEPS = 5              # максимальное количество 
 LM_MODEL = os.getenv("LM_MODEL", "local_model")        # или точное имя модели из LM Studio
 LM_STUDIO_URL = os.getenv("LM_STUDIO_URL", "http://127.0.0.1:1234/v1/chat/completions") # URL LM Studio Server, если используется локальная модель.
 
+EMBED_URL = os.getenv("EMBED_URL", "http://127.0.0.1:6789/v1/embeddings") # URL сервера Embedding, если используется локальная модель.
+EMBED_MODEL = os.getenv("EMBED_MODEL", "embeddinggemma2")   # название модели для векторизации текста (embedding) на сервере
+
+# Memory Config
+PROFILE_FILE = "data/profile.md"  # путь к файлу профиля собеседника
+MEMORY_DB = "data/memory.db"  # путь к базе данных памяти
+MEMORY_ENABLED = True
+MEMORY_DB = "data/memory.db"
+PROFILE_FILE = "data/profile.md"
+MEMORY_TOP_K = 4                # сколько фактов подставлять в запрос
+MEMORY_MIN_SCORE = 0.70         # минимальное косинусное сходство (подбирается через eval!)
+MEMORY_REL_MARGIN = 0.10        # отсекать факты, заметно хуже лучшего
+MEMORY_DEDUP_SCORE = 0.92       # выше — считаем дубликатом
+MEMORY_SIMILAR_SCORE = 0.80     # выше — похожий факт, предлагаем заменить
+MEMORY_FORGET_SCORE = 0.60      # порог поиска кандидатов для «забудь»
+MEMORY_MAX_CHARS = 1200         # бюджет блока фактов в промпте (~300 токенов)
+
 PIPER_PATH = "myenv/bin/piper"                              # путь к исполняемому файлу PIPER
 MODEL_PATH = "data/ru_RU-irina-medium.onnx"                 # путь к модели PIPER
 AUDIO_FILE = "data/input.wav"                               # файл для входного аудио
@@ -23,7 +40,7 @@ WAKE_WORDS = [
     "иви", "эви", "иди", "иве", "ивек", 
     "ивы", "ивик", "ивис", "эвил", "ивей", 
     "ивя", "эвей", "эйвей", "иби", "эби", 
-    "эйби", "ивих"
+    "эйби", "ивих", "и вея", "и ве", "ивия"
     ]   # варианты, как Whisper может расслышать имя
 CONVERSATION_TIMEOUT = 90    # сколько секунд ждать следующую фразу после окончания предыдущей, прежде чем закончить разговор
 

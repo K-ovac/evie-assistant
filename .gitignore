@@ -6,9 +6,15 @@
 data/notes.txt
 data/input.wav
 data/output.wav
-data/system_prompt.txt
 myenv/
 tbot.py
+test_memory.py
+*.txt
+!data/system_prompt_example.txt
+*.md
+!.example.md
+*.db
+*.json
 
 # Python cache
 __pycache__/

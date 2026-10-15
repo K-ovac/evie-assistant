@@ -30,11 +30,11 @@ def strip_wake_word(text):
     return False, text
 
 
-def voice_confirm(description):
+def voice_confirm(description, spoken=None):
     """Подтверждение опасных действий голосом."""
     listener = get_listener()
     print(f"\n⚠️  Требуется подтверждение: {description}")
-    speak("Нужно подтверждение. Выполнить? Скажи да или нет.")
+    speak(f"{spoken} Скажи да или нет." if spoken else "Нужно подтверждение. Выполнить? Скажи да или нет.")
     audio = listener.listen(wait_timeout=10)
     if audio is None:
         return False
