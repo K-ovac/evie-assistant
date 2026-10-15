@@ -4,6 +4,7 @@ torch                   # Whisper, Silero TTS, Silero VAD
 torchaudio              # нужен Silero VAD и ресемплинг (версия должна совпадать с torch)
 omegaconf               # нужен torch.hub для Silero TTS
 numpy
+packaging               # нужен torch.hub для Silero TTSмонито
 
 # Аудио (микрофон и воспроизведение)
 sounddevice             # нужен системный libportaudio2
